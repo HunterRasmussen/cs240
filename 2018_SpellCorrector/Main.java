@@ -14,6 +14,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws IOException {
 
+
 		String dictionaryFileName = args[0];
 		String inputWord = args[1];
 
@@ -24,7 +25,7 @@ public class Main {
 		corrector.useDictionary(dictionaryFileName);
 		SpellCorrector corrector2 = new SpellCorrector();
 		corrector2.useDictionary(dictionaryFileName);
-		corrector2.ourDictionaryTrie.add("birx");
+		//corrector2.ourDictionaryTrie.add("birx");
 		corrector.ourDictionaryTrie.add("birzz");
 		boolean checkEquals = corrector.ourDictionaryTrie.equals(corrector2.ourDictionaryTrie);
 		if(checkEquals){

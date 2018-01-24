@@ -12,6 +12,7 @@ class Trie implements ITrie{
   Node rootNode;
 
 
+
   public void add(String word){
     Node p = rootNode;
     for (int i = 0; i < word.length(); i++){
@@ -69,7 +70,7 @@ class Trie implements ITrie{
   }
 
   private void toString_r(StringBuilder returnString, StringBuilder currentWord, Node p){
-    System.out.println("Starting toString_r");
+    //System.out.println("Starting toString_r");
     for (int i = 0; i < 26; i++){
       if (p.nodes[i] != null){
         currentWord.append(numberToChar(i));
@@ -83,7 +84,7 @@ class Trie implements ITrie{
     if(currentWord.length() > 0){
       currentWord.setLength(currentWord.length()-1);
     }
-    System.out.println("Leaving toString_r");
+    //System.out.println("Leaving toString_r");
 
   }
 
@@ -163,6 +164,10 @@ class Trie implements ITrie{
     public Node(){
       nodes = new Node[26];
       count = 0;
+    }
+
+    public int getCount(){
+      return count;
     }
     private int count;
     Node[] nodes;
