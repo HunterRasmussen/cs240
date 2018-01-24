@@ -54,12 +54,26 @@ public class SpellCorrector implements ISpellCorrector {
     if(ourDictionaryTrie.find(inputWord) != null){
       return inputWord;
     }
-    String possibleWord = editDistance1(inputWord); //go get all words with edit distance of one
-    if (possibleWord !=null){
-        return possibleWord;
+    Set<String> possibleWords = editDistance1(inputWord); //go get all words with edit distance of one
+    Set<String> possibleWordsinTrie = findWordsinTrie(possibleWords); //find which of those words are in the Trie Dictionary
+    // are there any words with edit distance one in our dictinary?
+    if(possibleWordsinTrie.size()>0){
+      return findMostSimilar(possibleWordsinTrie);
     }
-    System.out.println("We went through edit distance of one and found no word. Returning edit distance2");
-    return editDistance2(inputWord);
+    //We didn't find any words with edit distance one.  Time to edit distance 2
+    Set<String> possibleWordsDistance2 = new TreeSet<String>();
+    System.out.println("We went through edits once and found no similar word. Running through all the edits again");
+    for(String word : possibleWords){
+      Set<String> temp = editDistance1(word);
+      if(temp != null){
+        possibleWordsDistance2.addAll(temp);
+      }
+    }
+    possibleWordsinTrie = findWordsinTrie(possibleWordsDistance2);
+    if(possibleWordsinTrie.size() <1){
+      return null;
+    }
+    return findMostSimilar(possibleWordsinTrie);
   }
 
   /**
@@ -79,7 +93,20 @@ public class SpellCorrector implements ISpellCorrector {
     return nonLetterFlag;
   }
 
-  private String editDistance1(String word){
+  private Set<String> findWordsinTrie(Set<String> possibleWords){
+    Set<String> wordsInTrie = new TreeSet<String>();
+    for(String word : possibleWords){
+      if(ourDictionaryTrie.find(word) != null){
+        //System.out.println("Found the following word in our trie and adding it: " + word);
+        wordsInTrie.add(word);
+      }
+    }
+    //System.out.println("Leaving findWordsinTrie.  The size of the set leaving is " + wordsInTrie.size());
+    return wordsInTrie;
+  }
+
+
+  private Set<String> editDistance1(String word){
     Set<String> possibleWords = new TreeSet<String>();
     Set<String> temp = deleteEdit(word);
     possibleWords.addAll(temp);
@@ -95,13 +122,11 @@ public class SpellCorrector implements ISpellCorrector {
     if(temp != null){
       possibleWords.addAll(temp);
     }
-    String toReturn = findMostSimilar(possibleWords);
-    return toReturn;
-
+    return possibleWords;
   }
 
   private String editDistance2(String word){
-
+    //Set<String> temp = deleteTwoEdit(word);
 
 
     return null;
@@ -114,10 +139,8 @@ public class SpellCorrector implements ISpellCorrector {
     for (int i = 0; i < word.length(); i++){
       StringBuilder potentialWord = new StringBuilder(word);
       potentialWord.deleteCharAt(i);
-      if(ourDictionaryTrie.find(potentialWord.toString()) != null){
-        System.out.println("Adding the following potential word from Delete to our Set: " + potentialWord.toString());
-        possibleWords.add(potentialWord.toString());
-      }
+      //System.out.println("Adding the following potential word from Delete to our Set: " + potentialWord.toString());
+      possibleWords.add(potentialWord.toString());
     }
     return possibleWords;
   }
@@ -129,10 +152,8 @@ public class SpellCorrector implements ISpellCorrector {
       for (int j = 0; j < 26; j++){
         char toInsert = numberToChar(j);
         editedWord.setCharAt(i,toInsert);
-        if (ourDictionaryTrie.find(editedWord.toString()) != null){
-        System.out.println("Adding the following from alteration to our Set " + editedWord.toString());
-          toReturn.add(editedWord.toString());
-        }
+        //System.out.println("Adding the following from alteration to our Set " + editedWord.toString());
+        toReturn.add(editedWord.toString());
       }
     }
     return toReturn;
@@ -146,10 +167,8 @@ public class SpellCorrector implements ISpellCorrector {
         StringBuilder wordToEdit = new StringBuilder(word);
         wordToEdit.insert(i,toInsert);
         //System.out.println("Word To Edit = " + wordToEdit );
-        if(ourDictionaryTrie.find(wordToEdit.toString()) != null){
-          System.out.println("Adding the following from insertion to our Set " + wordToEdit.toString());
-          toReturn.add(wordToEdit.toString());
-        }
+        //System.out.println("Adding the following from insertion to our Set " + wordToEdit.toString());
+        toReturn.add(wordToEdit.toString());
       }
     }
     return toReturn;
@@ -160,14 +179,15 @@ public class SpellCorrector implements ISpellCorrector {
     for(int i = 0; i < word.length()-1; i++){
       StringBuilder wordToEdit = new StringBuilder(word);
       String editedWord = swapChars(wordToEdit, i, i+1);
-      System.out.println("Edited Word is " + editedWord);
-      if(ourDictionaryTrie.find(editedWord) != null){
-        System.out.println("Adding the following transposed word: " + editedWord);
-        toReturn.add(editedWord);
-      }
+      //System.out.println("Adding the following transposed word: " + editedWord);
+      toReturn.add(editedWord);
     }
     return toReturn;
   }
+
+
+
+
 
 
   private String findMostSimilar(Set<String> possibleWords){
@@ -195,14 +215,14 @@ public class SpellCorrector implements ISpellCorrector {
     return wordToEdit.toString();
   }
 
-  private char numberToChar(int number){
-    if (number > -1 && number < 26){
-      return (char)(number+'a');
+    private char numberToChar(int number){
+      if (number > -1 && number < 26){
+        return (char)(number+'a');
+      }
+      else{
+        return Character.MIN_VALUE;
+      }
     }
-    else{
-      return Character.MIN_VALUE;
-    }
-  }
 
 
 
