@@ -23,30 +23,24 @@ public class Main {
 		 */
 		SpellCorrector corrector = new SpellCorrector();
 		corrector.useDictionary(dictionaryFileName);
-		SpellCorrector corrector2 = new SpellCorrector();
-		corrector2.useDictionary(dictionaryFileName);
+		//SpellCorrector corrector2 = new SpellCorrector();
+		//corrector2.useDictionary(dictionaryFileName);
 		//corrector2.ourDictionaryTrie.add("birx");
-		corrector.ourDictionaryTrie.add("birzz");
-		boolean checkEquals = corrector.ourDictionaryTrie.equals(corrector2.ourDictionaryTrie);
-		if(checkEquals){
-		System.out.println("Those two tries are equal");
-		}
-		else {
-			System.out.println("Those two tries are not equal");
-		}
-		System.out.println(corrector2.ourDictionaryTrie.toString());
-		/*Trie.Node foundWord = corrector.ourDictionaryTrie.find("fred");
-		if (foundWord != null){
-			System.out.println("Found that word! Whee.");
-		}
-		else{
-			System.out.println("Didnt find that word booo.");
-		}*/
+		//corrector.ourDictionaryTrie.add("birzz");
+		//boolean checkEquals = corrector.ourDictionaryTrie.equals(corrector2.ourDictionaryTrie);
+		//if(checkEquals){
+			//System.out.println("Those two tries are equal");
+		//}
+		//else {
+			//System.out.println("Those two tries are not equal");
+		//}
+		//System.out.println(corrector2.ourDictionaryTrie.toString());
 		String suggestion = corrector.suggestSimilarWord(inputWord);
 		if (suggestion == null) {
 		    suggestion = "No similar word found";
 		}
 
+		System.out.println("You typed in: " + inputWord);
 		System.out.println("Suggestion is: " + suggestion);
 	}
 
