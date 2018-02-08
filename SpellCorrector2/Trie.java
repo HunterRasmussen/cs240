@@ -178,16 +178,20 @@ private void toString_r(Node p, StringBuilder currentWord, StringBuilder finalSt
       return true;
     }
     if(o==null){
+      System.out.println("Object passed in was null.  Returning false");
       return false;
     }
     if(this.getClass() != o.getClass()){
+      System.out.println("Classes weren't equal.  REturning false");
       return false;
     }
     Trie toCompare = (Trie)o;
-    if((this.nodeCount != toCompare.nodeCount) || (this.wordCount != o.wordCount)){}
+    if((this.nodeCount != toCompare.nodeCount) || (this.wordCount != toCompare.wordCount)){
+      System.out.println("Node counts are diff.  returning false");
       return false;
     }
-    return equals_r(this.root, o.root);
+    return equals_r(this.root, toCompare.root);
+
   }
 
 
@@ -196,14 +200,17 @@ private void toString_r(Node p, StringBuilder currentWord, StringBuilder finalSt
       return true;
     }
     if(a.count != b.count){
+      System.out.println("Returning false 200");
       return false;
     }
     for(int i = 0; i < 26; i++){
       if((a.nodes[i] != null && b.nodes[i] == null) || (a.nodes[i] == null && b.nodes[i] != null)){
+        System.out.println("returning false 204");
         return false;
       }
       else if(a.nodes[i] != null && b.nodes[i] != null){
         if(!equals_r(a.nodes[i], b.nodes[i])){
+          System.out.println("returning false 208");
           return false;
         }
       }

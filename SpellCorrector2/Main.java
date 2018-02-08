@@ -23,7 +23,15 @@ public class Main {
 		 */
 		SpellCorrector corrector = new SpellCorrector();
 		corrector.useDictionary(dictionaryFileName);
-		
+		// corrector.dictionary.add("boot");
+    // SpellCorrector corrector2 = new SpellCorrector();
+    // corrector2.useDictionary(dictionaryFileName);
+    // if(corrector.dictionary.equals(corrector2.dictionary)){
+    //   System.out.println("Yes.  those two are eqaul");
+    // }
+    // else{
+    //   System.out.println("No, those two are not equal");
+    // }
 		String suggestion = corrector.suggestSimilarWord(inputWord);
 		if (suggestion == null) {
 		    suggestion = "No similar word found";
