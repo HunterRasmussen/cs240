@@ -215,7 +215,7 @@ public class SpellCorrector implements ISpellCorrector {
     return wordToEdit.toString();
   }
 
-    private char numberToChar(int number){
+  private char numberToChar(int number){
       if (number > -1 && number < 26){
         return (char)(number+'a');
       }
